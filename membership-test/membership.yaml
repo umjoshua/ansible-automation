@@ -1,0 +1,20 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Variables demo
+  hosts: all
+  remote_user: test
+  become: true
+  become_user: root
+
+  vars:
+    a: "hello"
+    b: 5
+    c: [1,2,3,4]
+  
+  tasks:
+    - name: methods demo
+      debug:
+        msg:
+          - "a is upper: {{a is upper}}"
+          - "b in c: {{b in c}}"
+          - "b not in c: {{b  not in c}}"
+          - "d is defined: {{d is defined}}"

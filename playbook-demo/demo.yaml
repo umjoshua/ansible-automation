@@ -1,0 +1,19 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Install
+  hosts: all
+  remote_user: test
+  become: true
+  become_user: root
+
+  tasks:
+    - name: Install git
+      ansible.builtin.apt:
+        name: git
+        state: latest
+    - name: Ping
+      ping:
+    - name: service running
+      service:
+        name: ssh
+        state: started
+      

@@ -1,0 +1,27 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Variables demo
+  hosts: all
+  remote_user: test
+
+  tasks:
+    - block:
+      - name: list
+        command: "ls /root"
+        register: result
+      - debug: msg="{{result.stdout_lines}}"
+    
+      become: true
+      become_user: root
+
+      rescue:
+        - name: Rescue block
+          debug: msg="Something went wrong"
+      
+      always:
+        - name: Alwasy block
+          debug: msg="This will execute always"
+
+    - name: list root
+      command: "ls ~/"
+      register: result1
+    - debug: msg="{{result1.stdout_lines}}"

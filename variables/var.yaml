@@ -1,0 +1,15 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Variables demo
+  hosts: all
+  remote_user: test
+  become: true
+  become_user: root
+
+  vars:
+    packages: [htop,curl]
+  
+  tasks:
+    - name: Install packages
+      apt:
+        name: "{{packages}}"
+        state: latest

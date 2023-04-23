@@ -1,0 +1,20 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Variables demo
+  hosts: all
+  remote_user: test
+  become: true
+  become_user: root
+
+  tasks:
+    - name: "Error demo"
+      command: "ls /etcc/"
+      register: result
+      ignore_errors: true
+    - debug: var=result
+
+    - name: List all files/dirs in /etc location
+      command: "ls /etcc/"
+      register: result1
+      ignore_errors: true
+    - debug: var=result1
+      failed_when: result1.rc==2

@@ -1,0 +1,49 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Variables demo
+  hosts: all
+  remote_user: ubuntu
+  become: yes
+  become_user: root
+  
+  vars:
+    anonymous_enable: yes
+    local_enable: yes
+    write_enable: yes
+    anon_upload_enable: yes
+
+  tasks:
+    - block:
+        - name: Install vsftpd
+          apt:
+            name: vsftpd
+            state: present
+        
+        - name: Backup existing conf
+          copy:
+            src: /etc/vsftpd.conf
+            dest: /etc/vsftpd.conf.bkp
+            remote_src: yes
+
+        - name: Copy custom conf
+          copy:
+            src: vsftpd.j2
+            dest: /etc/vsftpd.conf
+          
+        - name: Failing
+          command: "ls /etcc"
+
+      rescue:
+        - name: Rescue block
+          debug:
+            msg: Something went wrong
+        - name: Restoring configuration
+          copy:
+            src: /etc/vsftpd.conf.bkp
+            dest: /etc/vsftpd.conf
+            remote_src: true
+          
+      always:
+        - name: Always block
+          service:
+            name: vsftpd
+            state: restarted

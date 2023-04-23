@@ -1,0 +1,23 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Variables demo
+  hosts: all
+  remote_user: test
+  become: true
+  become_user: root
+
+  vars:
+    a: 5
+    b: 6
+  
+  tasks:
+    - name: condition operation
+      debug:
+        msg:
+          - "a > b"
+      when: a>b
+
+    - name: condition operation
+      debug:
+        msg:
+          - "a < b"
+      when: a<b

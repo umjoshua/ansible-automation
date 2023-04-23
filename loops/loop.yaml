@@ -1,0 +1,53 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Variables demo
+  hosts: all
+  remote_user: test
+  become: true
+  become_user: root
+
+  vars:
+    packages: [htop, curl]
+
+  tasks:
+    - name: Add users
+      user:
+        name: "{{ item.name }}"
+        state: present
+        groups: "{{ item.group }}"
+      with_items:
+        - {name: 'test1', group: 'sudo'}
+        - {name: 'test2', group: 'video'}
+
+    
+    # Random choice loop
+    - name: Loop demo 1
+      debug:
+        msg: "{{item}}"
+      with_random_choice:
+        - 1
+        - 2
+        - 3
+    
+    # Do until Loop
+    - name: Ensure apache running
+      service:
+        name: apache2
+        state: started
+      register: result
+      until: result.changed == True
+      retries: 3
+      delay: 7
+    
+    # Loop
+    - name : Install packages
+      apt:
+        name: "{{item}}"
+      loop:
+        - htop
+        - curl
+    
+    - name: Remove packages
+      apt:
+        name: "{{item.1}}"
+      with_indexed_items:
+        - "{{packages}}"

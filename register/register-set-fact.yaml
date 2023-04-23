@@ -1,0 +1,18 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: Install
+  hosts: all
+  remote_user: test
+  become: true
+  become_user: root
+
+  tasks:
+    - name: Retrieve shell version
+      shell: "bash --version"
+      register: bash_ver
+
+    - set_fact:
+        bash_version: "{{bash_ver.stdout_lines[0].split()[3]}}"
+
+    - name: Display shell version
+      debug:
+        var: bash_version
