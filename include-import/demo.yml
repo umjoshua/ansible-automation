@@ -1,0 +1,10 @@
+#!/media/joshua/Data2/Devops/ansible/venv/bin/ansible-playbook
+- name: include demo
+  hosts: all
+  remote_user: test
+
+  tasks:
+    - name: task 1
+      debug:
+        msg: "Task 1"
+    - include_tasks: task2.yml
